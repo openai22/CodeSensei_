@@ -1,0 +1,36 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+
+# Build artifacts
+dist/
+build/
+
+# Ignore uploads folder (if not needed in the repository)
+Codesensi/uploads/
+
+# Ignore embedded Git repository
+Codesensi/.git
+
+# Ignore JSON files
+*.json
+
+# Ignore other unnecessary files
+.idea/
+.vscode/
+*.bak
+*.old

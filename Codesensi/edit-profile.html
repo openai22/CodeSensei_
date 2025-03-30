@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .edit-profile-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+        .edit-profile-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .edit-profile-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-profile-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-profile-container">
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="collegeId" placeholder="College ID" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="stream" placeholder="Stream" required>
+            <input type="text" id="username" placeholder="Username" required>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/profile-data');
+            const user = await response.json();
+            document.getElementById('name').value = user.name;
+            document.getElementById('collegeId').value = user.collegeId;
+            document.getElementById('email').value = user.email;
+            document.getElementById('stream').value = user.stream;
+            document.getElementById('username').value = user.username;
+        });
+
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const updatedData = {
+                name: document.getElementById('name').value,
+                collegeId: document.getElementById('collegeId').value,
+                email: document.getElementById('email').value,
+                stream: document.getElementById('stream').value,
+                username: document.getElementById('username').value
+            };
+
+            const response = await fetch('/update-profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+
+            if (response.ok) {
+                alert('Profile updated successfully.');
+                window.location.href = '/profile.html';
+            } else {
+                const error = await response.json();
+                alert('Error updating profile: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

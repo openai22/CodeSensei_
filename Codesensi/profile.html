@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c, #6a11cb, #2575fc);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            color: #fff;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .profile-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(255, 105, 180, 0.5);
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #ff69b4;
+            box-shadow: 0 0 15px #ff69b4;
+        }
+
+        .update-picture-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .update-picture-form input[type="file"] {
+            margin-bottom: 10px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .update-picture-form button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(255, 105, 180, 0.5);
+        }
+
+        .update-picture-form button:hover {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .profile-info div {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #fff;
+        }
+
+        .profile-info div h3 {
+            margin: 0;
+            color: #ffeb3b;
+            font-size: 1.2rem;
+        }
+
+        .profile-info div p {
+            margin: 5px 0;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .home-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #34e89e, #0f3443);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(52, 232, 158, 0.5);
+        }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #0f3443, #34e89e);
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img src="/default-profile.png" alt="Profile Picture" class="profile-picture" id="profilePicture">
+        <form class="update-picture-form" id="updatePictureForm" enctype="multipart/form-data">
+            <input type="file" id="profilePictureFile" name="profilePicture" accept="image/*">
+            <button type="submit">Upload Picture</button>
+        </form>
+        <div class="profile-info">
+            <div>
+                <h3>Name</h3>
+                <p id="name">John Doe</p>
+            </div>
+            <div>
+                <h3>Email</h3>
+                <p id="email">johndoe@example.com</p>
+            </div>
+            <div>
+                <h3>College ID</h3>
+                <p id="collegeId">12345</p>
+            </div>
+            <div>
+                <h3>Stream</h3>
+                <p id="stream">Computer Science</p>
+            </div>
+            <div>
+                <h3>Username</h3>
+                <p id="username">johndoe</p>
+            </div>
+        </div>
+        <button class="home-button" onclick="window.location.href='/index.html'">Go to Home</button>
+        <button class="home-button" onclick="window.location.href='/edit-profile.html'">Edit Profile</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/profile-data');
+            const user = await response.json();
+            document.getElementById('profilePicture').src = user.profilePicture || '/default-profile.png';
+            document.getElementById('name').textContent = user.name;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('collegeId').textContent = `College ID: ${user.collegeId}`;
+            document.getElementById('stream').textContent = `Stream: ${user.stream}`;
+            document.getElementById('username').textContent = `Username: ${user.username}`;
+        });
+
+        document.getElementById('updatePictureForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('profilePictureFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            formData.append('profilePicture', fileInput.files[0]);
+
+            const response = await fetch('/update-profile-picture', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert('Profile picture updated successfully.');
+                document.getElementById('profilePicture').src = data.profilePicture;
+            } else {
+                alert('Error updating profile picture.');
+            }
+        });
+    </script>
+</body>
+</html>

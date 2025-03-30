@@ -1,0 +1,43 @@
+/* Centering the content */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 80px;
+    color: #e74c3c;
+    margin: 0;
+}
+
+p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+a:hover {
+    background: #2980b9;
+}
